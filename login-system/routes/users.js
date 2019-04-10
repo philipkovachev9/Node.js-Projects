@@ -58,8 +58,25 @@ router.post('/register', (req, res) => {
           email,
           password
         });
-      }
-    });
+     ;
+   // Hashing the password
+    bcrypt.genSalt(10, (err, salt) =>
+     bcrypt.hash(newUser.password, salt, (err, hash) => {
+         if(err) throw err;
+         // Set password to hashed
+         newUser.password = hash;
+       // Save user
+       newUser.save()
+            .then(user => {
+              res.redirect('../views/login.ejs');
+            })
+            .catch(err => console.log(err));
+
+
+    }))
+  }
+})
+
   }
 });
 module.exports = router;
